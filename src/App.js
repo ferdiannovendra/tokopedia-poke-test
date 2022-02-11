@@ -1,52 +1,64 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import { getAllPokemon, getPokemon } from './containers/PokemonsContainer';
+import Home from './containers/Home/Home';
+import Mypokemon from './containers/Mypokemon/Mypokemon';
 import Card from './components/Card/Card';
 import Navbar from './components/Navbar/Navbar';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Details from './containers/Details/Detail';
 
 function App() {
-  const [pokemonData, setPokemonData] = useState([]);
-  const [nextUrl, setNextUrl] = useState('');
-  const [prevUrl, setPrevUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-  const initialUrl = 'https://pokeapi.co/api/v2/pokemon'
+  // const [pokemonData, setPokemonData] = useState([]);
+  // const [nextUrl, setNextUrl] = useState('');
+  // const [prevUrl, setPrevUrl] = useState('');
+  // const [loading, setLoading] = useState(true);
+  // const initialUrl = 'https://pokeapi.co/api/v2/pokemon'
 
-  useEffect(() => {
-    async function fetchData() {
-      let response = await getAllPokemon(initialUrl);
-      setNextUrl(response.next);
-      setPrevUrl(response.previous);
-      await loadingPokemon(response.results);
-      setLoading(false);
-    }
-    fetchData();
-  }, [])
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     let response = await getAllPokemon(initialUrl);
+  //     setNextUrl(response.next);
+  //     setPrevUrl(response.previous);
+  //     await loadingPokemon(response.results);
+  //     setLoading(false);
+  //   }
+  //   fetchData();
+  // }, [])
 
-  const loadingPokemon = async (data) => {
-    let _pokemonData = await Promise.all(data.map(async pokemon => {
-      let pokemonRecord = await getPokemon(pokemon.url);
-      return pokemonRecord; 
-    }))
+  // const loadingPokemon = async (data) => {
+  //   let _pokemonData = await Promise.all(data.map(async pokemon => {
+  //     let pokemonRecord = await getPokemon(pokemon.url);
+  //     return pokemonRecord; 
+  //   }))
     
-    setPokemonData(_pokemonData);
-  }
+  //   setPokemonData(_pokemonData);
+  // }
 
-  console.log(pokemonData);
+  // console.log(pokemonData);
 
   return (
+    <Router>
+
     <Fragment>
     <Navbar />
+    
+    <Switch>
+      <Route exact path='/'>
+        <Home />
+      </Route>
+      <Route path='/my'>
+        <Mypokemon />
+      </Route>
+      <Route path='/pokemon/:id'>
+        <Details />
+      </Route>
+    </Switch>
+    
 
-    <div>
-      { loading ? <h1>Loading...</h1> : (
-        <div className='grid-container'>
-          {pokemonData.map((pokemon, i) => {
-            return <Card key={i} pokemon={pokemon} />
-          })}
-        </div>
-      )}
-    </div>
     </Fragment>
+    </Router>
+    
   )
 }
 

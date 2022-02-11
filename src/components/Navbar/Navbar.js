@@ -1,11 +1,12 @@
 import React from 'react';
 import './style.css';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
     return (
         <div className="Navbar">
-            <div className='item'>Pokemon API</div>
-            <div className='item'>My Pokemon</div>
+            <Link to="/" className='item'>Home</Link>
+            <Link to="/my" className='item'>My Pokemon</Link>
         </div>
     );
 }

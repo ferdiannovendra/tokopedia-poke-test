@@ -10,6 +10,8 @@
 
 }
 .item{
+    color: white !important;
+    font-style: normal;
     width: auto;
     height: auto;
     padding: 10px;

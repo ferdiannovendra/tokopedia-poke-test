@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useState, useEffect, Fragment} from 'react';
+import { getAllPokemon, getPokemon } from '../PokemonsContainer';
+import Card from '../../components/Card';
+import Navbar from '../../components/Navbar/Navbar';
+import { useParams } from 'react-router-dom';
 import './cardstyle.css';
 import { css, keyframes } from '@emotion/css'
-import { Link } from 'react-router-dom';
 
-function Card({pokemon},) {
+function Details() {
     const bounce = keyframes({
         'from, 20%, 53%, 80%, to': {
           transform: 'translate3d(0,0,0)'
@@ -19,15 +22,31 @@ function Card({pokemon},) {
         }
       })
       
-    return (
-        
-        <div className="Card">
-            <Link to={`/pokemon/${pokemon.id}`}>
+    const { id } = useParams();
+    var idpoke = { id };
+    const [pokemonData, setPokemonData] = useState([]);
+    const initialUrl = 'https://pokeapi.co/api/v2/pokemon/'+ idpoke.id +'/';
+  
+    useEffect(() => {
+        async function fetchData() {
+          let response = await getAllPokemon(initialUrl);
+          console.log(response);
+          setPokemonData(response);    
+        }
+        fetchData();
+      }, [])
+    
+      
+    console.log(pokemonData);
+    
+  return (
+      <Fragment>
+    <div className="Card">
             <div className="Card__img">
-                <img src={pokemon.sprites.front_default} 
+                <img src={pokemonData.sprites.front_default} 
                     className={css({
-                        width: 96,
-                        height: 96,
+                        width: 150,
+                        height: 150,
                         borderRadius: '50%',
                         animation: `${bounce} 1s ease infinite`,
                         transformOrigin: 'center bottom'
@@ -35,13 +54,12 @@ function Card({pokemon},) {
                   ></img>
             </div>
             <div className="Card__name">
-                {pokemon.name}
+                {pokemonData.name}
             </div>
-            </Link>
             
             <div className="Card__types">
                 {
-                    pokemon.types.map(type => {
+                    pokemonData.types.map(type => {
                         return (
                             <div className="Card__type">
                                 {type.type.name}
@@ -50,19 +68,22 @@ function Card({pokemon},) {
                     })
                 }
             </div>
+            <div className="button">
+                <div className="btn">Catch!</div>
+            </div>
             <div className="Card__info">
                 <div className="Card__data Card__data--weight">
                     <p className="title">Weight</p>
-                    <p>{pokemon.weight}</p>
+                    <p>{pokemonData.weight}</p>
                 </div>
                 <div className="Card__data Card__data--weight">
                     <p className="title">Height</p>
-                    <p>{pokemon.height}</p>
+                    <p>{pokemonData.height}</p>
                 </div>
                 <div className="Card__data Card__data--ability">
                     <p className="title">Ability</p>
                         {
-                            pokemon.abilities.map(ab => {
+                            pokemonData.abilities.map(ab => {
                                 return (
                                     <div>
                                         <ul>
@@ -75,10 +96,11 @@ function Card({pokemon},) {
                         }
                 </div>
             </div>
-            {/* <div className="button">
-                <div className="btn">Catch!</div>
-            </div> */}
+            
         </div>
-    )
+        </Fragment>
+    
+  )
 }
-export default Card;
+
+export default Details;
