@@ -1,0 +1,17 @@
+.Navbar {
+    padding: 20px;
+    background: #0f9440;
+    color: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    /* position: fixed; */
+    margin-bottom: 20px;
+
+}
+.item{
+    width: auto;
+    height: auto;
+    padding: 10px;
+    background: #017e2f;
+}
