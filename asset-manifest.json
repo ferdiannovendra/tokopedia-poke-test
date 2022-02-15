@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tokopedia-poke-test/static/css/main.a3886cdb.css",
-    "main.js": "/tokopedia-poke-test/static/js/main.ba839daf.js",
-    "index.html": "/tokopedia-poke-test/index.html",
-    "main.a3886cdb.css.map": "/tokopedia-poke-test/static/css/main.a3886cdb.css.map",
-    "main.ba839daf.js.map": "/tokopedia-poke-test/static/js/main.ba839daf.js.map"
+    "main.css": "/static/css/main.cb9617db.css",
+    "main.js": "/static/js/main.98b29c4a.js",
+    "index.html": "/index.html",
+    "main.cb9617db.css.map": "/static/css/main.cb9617db.css.map",
+    "main.98b29c4a.js.map": "/static/js/main.98b29c4a.js.map"
   },
   "entrypoints": [
-    "static/css/main.a3886cdb.css",
-    "static/js/main.ba839daf.js"
+    "static/css/main.cb9617db.css",
+    "static/js/main.98b29c4a.js"
   ]
 }
