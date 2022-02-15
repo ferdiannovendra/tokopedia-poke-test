@@ -1,10 +1,9 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import { getAllPokemon, getPokemon } from '../PokemonsContainer';
-import Card from '../../components/Card';
-import Navbar from '../../components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import './cardstyle.css';
-import { css, keyframes } from '@emotion/css'
+import { css, keyframes } from '@emotion/css';
+import Axios from 'axios';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 function Details() {
     const bounce = keyframes({
@@ -25,28 +24,55 @@ function Details() {
     const { id } = useParams();
     var idpoke = { id };
     const [pokemonData, setPokemonData] = useState([]);
-    const initialUrl = 'https://pokeapi.co/api/v2/pokemon/'+ idpoke.id +'/';
-  
-    useEffect(() => {
-        async function fetchData() {
-          let response = await getAllPokemon(initialUrl);
-          console.log(response);
-          setPokemonData(response);    
-        }
-        fetchData();
-      }, [])
-    
+    const [pokemon, setPokemon] = useState({});
+    const [pokedata, setPokeData] = useLocalStorage("catched",[]);
+
+    const catchPoke = () => {
+      var isoke = false;
+      const nextId = pokedata.length > 0 ? Math.max(...pokedata.map((t) => t.id)) +1 : 0;
+      const random = Math.floor(Math.random() * 2);
+      console.log("nextid : " + nextId);
+      console.log("random : " + random);
+      if (random == 1) {
+        Axios.get(`https://pokeapi.co/api/v2/pokemon/${idpoke.id}/`)
+        .then((response) => {
+          setPokeData([...pokedata,{
+            idmypoke:nextId,
+            id:response.data.id,
+            name: response.data.name,
+            images: response.data.sprites.front_default,
+            weight: response.data.weight,
+            height: response.data.height
+          }])
+        });
+        alert('Catch Success!')
+      }else{
+        alert('Catch Failed')
+      }
       
-    console.log(pokemonData);
-    
-  return (
+    }
+
+    const findPokemon = () => {
+      Axios.get(`https://pokeapi.co/api/v2/pokemon/${idpoke.id}/`)
+      .then((response) => {
+        setPokemon({
+          name: response.data.name,
+          images: response.data.sprites.front_default,
+          weight: response.data.weight,
+          height: response.data.height
+        })
+      });
+      
+    };
+    findPokemon();
+    return (
       <Fragment>
-    <div className="Card">
+          <div className="Card">
             <div className="Card__img">
-                <img src={pokemonData.sprites.front_default} 
+                <img src={pokemon.images} 
                     className={css({
-                        width: 150,
-                        height: 150,
+                        width: 96,
+                        height: 96,
                         borderRadius: '50%',
                         animation: `${bounce} 1s ease infinite`,
                         transformOrigin: 'center bottom'
@@ -54,49 +80,21 @@ function Details() {
                   ></img>
             </div>
             <div className="Card__name">
-                {pokemonData.name}
-            </div>
-            
-            <div className="Card__types">
-                {
-                    pokemonData.types.map(type => {
-                        return (
-                            <div className="Card__type">
-                                {type.type.name}
-                            </div>
-                        )
-                    })
-                }
-            </div>
-            <div className="button">
-                <div className="btn">Catch!</div>
+                {pokemon.name}
             </div>
             <div className="Card__info">
                 <div className="Card__data Card__data--weight">
-                    <p className="title">Weight</p>
-                    <p>{pokemonData.weight}</p>
+                    <p className="title">Weight : </p>
+                    <p>{pokemon.weight}</p>
                 </div>
                 <div className="Card__data Card__data--weight">
-                    <p className="title">Height</p>
-                    <p>{pokemonData.height}</p>
-                </div>
-                <div className="Card__data Card__data--ability">
-                    <p className="title">Ability</p>
-                        {
-                            pokemonData.abilities.map(ab => {
-                                return (
-                                    <div>
-                                        <ul>
-                                            <li className="li">{ab.ability.name}</li>
-                                        </ul>
-                                        
-                                    </div>
-                                )
-                            })
-                        }
+                    <p className="title">Height : </p>
+                    <p>{pokemon.height}</p>
                 </div>
             </div>
-            
+            <div className="button">
+                <div className="btn" onClick={catchPoke}>Catch!</div>
+            </div>
         </div>
         </Fragment>
     

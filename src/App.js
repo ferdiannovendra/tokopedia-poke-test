@@ -7,6 +7,7 @@ import Navbar from './components/Navbar/Navbar';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Details from './containers/Details/Detail';
+import DetailPoke from './containers/DetailPoke/DetailPoke';
 
 function App() {
   // const [pokemonData, setPokemonData] = useState([]);

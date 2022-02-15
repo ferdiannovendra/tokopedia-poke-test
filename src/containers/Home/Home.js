@@ -41,7 +41,7 @@ function Home() {
       { loading ? <h1>Loading...</h1> : (
         <div className='grid-container'>
           {pokemonData.map((pokemon, i) => {
-            return <Card key={pokemon.id} pokemon={pokemon} />
+            return <Card key={i} pokemon={pokemon} />
           })}
         </div>
       )}
